@@ -1,14 +1,14 @@
 # IDA-2019-tutorials
 # Tutorial 1 - Plan
 
-###### NINA
+#### NINA
 0. Organizational issues - explain homework procedure
 
-# Might be extended by functions that are in the homework
+(Might be extended by functions that are in the homework)
 1. Tidy data
  -- tibbles
  -- piping
- extend
+
 2. ggplot - plotting
 -- plot some simple things
 
@@ -17,7 +17,7 @@
   -- summarise
   -- filter
 
-####### MARIA
+#### MARIA
 3.1-- arrange 
   -- select 
   -- mutate
