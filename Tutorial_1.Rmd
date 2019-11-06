@@ -22,10 +22,12 @@ library(IDA2019)
 ```{r }
 
 ###### NINA
+0.Organizational issues - explain homework procedure
+# Might be extended by functions that are in the homework
 1. Tidy data
  -- tibbles
  -- piping
-
+ extend
 2. ggplot - plotting
 -- plot some simple things
 
