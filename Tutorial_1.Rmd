@@ -19,6 +19,39 @@ library(IDA2019)
 # Hey
 ```
 
+```{r }
+
+###### NINA
+1. Tidy data
+ -- tibbles
+ -- piping
+
+2. ggplot - plotting
+-- plot some simple things
+
+3. pipe and data wrangling 
+  -- group_by
+  -- summarise
+  -- filter
+
+####### MARIA
+3.1-- arrange 
+  -- select 
+  -- mutate
+
+
+4. statistical manipulation
+  -- mean/mode/median/
+  -- quantiles/bootstraped CI of mean
+  -- variance, standard deviation
+  -- bootstrap
+  -- correlation 
+  -- pairs plots
+  
+  
+
+```
+
 # 1.Tidy
 
 # 2. GGplot
