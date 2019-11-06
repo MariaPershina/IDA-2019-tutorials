@@ -5,30 +5,32 @@
 0. Organizational issues - explain homework procedure
 
 (Might be extended by functions that are in the homework)
-1. Tidy data
- -- tibbles
- -- piping
+1. Tidy data:
+ - tibbles
+ - piping
 
-2. ggplot - plotting
--- plot some simple things
+2. ggplot - plotting:
+- plot some simple things
 
-3. pipe and data wrangling 
-  -- group_by
-  -- summarise
-  -- filter
+3. pipe and data wrangling:
+  - group_by
+  - summarise
+  - filter
 
 #### MARIA
-3.1-- arrange 
-  -- select 
-  -- mutate
+3.1. data wrangling:
+  - arrange 
+  - select 
+  - mutate
 
 
-4. statistical manipulation
-  -- mean/mode/median/
-  -- quantiles/bootstraped CI of mean
-  -- variance, standard deviation
-  -- bootstrap
-  -- correlation 
-  -- pairs plots
+4. statistical manipulation:
+
+  - mean/mode/median/
+  - quantiles/bootstraped CI of mean
+  - variance, standard deviation
+  - bootstrap
+  - correlation 
+  - pairs plots
   
   
