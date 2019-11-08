@@ -37,29 +37,112 @@ library(IDA2019)
 library(tidyverse)
 ```
  
+## Data Handling
 
 
-###  1. Tidy data
-
-In order to learn something about R, we have prepared some data visualization and exploration tasks for you, using the `mpg` data frame found in ggplot2 (aka `ggplot2::mpg`).
+In order to learn something about R, I have prepared some data exploration tasks for you, using the `mpg` data frame found in ggplot2 (aka `ggplot2::mpg`).
 The data frame mpg contains observations collected by the US Environmental Protection Agency on 38 models of car
 
+### Vectors/ data types
 
+
+Vectors are particularly important as most of the functions you will write will work with vectors.
+
+There are two types of vectors:
+
+1. *Atomic vectors*, of which there are six types: logical, integer, double, character, complex, and raw. Integer and double vectors are collectively known as *numeric vectors*. Integers have one special value: `NA`, while doubles have four: `NA`, `NaN`, `Inf` and `-Inf`. All three special values `NaN`, `Inf` and `-Inf` can arise during division:
+ 
+ 
 ```{r }
-# display the data set mpg
-mpg
-
+c(-1, 0, 1) / 0
 
 ```
 
-We can explore the data even better to get an idea what it looks like:
+
+2. *Lists*, which are sometimes called recursive vectors because lists can contain other lists. 
+
+The chief difference between atomic vectors and lists is that atomic vectors are homogeneous, while lists can be heterogeneous. There’s one other related object: `NULL`. `NULL` is often used to represent the *absence of a vector* (as opposed to `NA` which is used to represent the *absence of a value in a vector*). NULL typically behaves like a vector of length 0. 
+
+
+*In short:*
+
+NaN  : means 0/0 -- Stands for "Not a Number"
+
+NA   : is generally interpreted as a missing value, does not exist. Stand for "Not Available"
+
+NULL : is for "empty object".
+
+
+
+Every vector has two key properties:
+
+1. Its type, which you can determine with `typeof()``.
 
 ```{r }
-head(mpg) # gives you the first 10 entries
+typeof(letters)
 
-tail(mpg) # gives you?
+typeof(1:10)
 
-summary(mpg)
+typeof(TRUE)
+
+typeof(1999)
+
+typeof(1.8888888)
+
+```
+2. Its length, which you can determine with `length()`.
+
+```{r }
+
+x <- list("a", "b", 1:10)
+length(x)
+
+```
+ 
+Vectors can also contain arbitrary additional metadata in the form of attributes. These attributes are used to create augmented vectors which build on additional behaviour. There are three important types of augmented vector:
+
+1. *Factors* are built on top of integer vectors.
+2. *Dates* and *date-times* are built on top of numeric vectors.
+3. *Data frames* and *tibbles* are built on top of lists.
+ 
+If you want to get the length of a vector in a data frame, you cannot type `length()` anymore. What you do is:
+
+```{r }
+# create a vector
+x <- c("a", "b", 1:10)
+
+# convert it to a tibble
+x <- as.tibble(x)
+
+# get the length of the tibble
+length(x)
+
+# get the number of rows x is composed of
+nrow(x)
+
+```
+ 
+ 
+The four most important types of atomic vector are *logical*, *integer*, *double*, and *character*.
+ 
+ 
+
+ 
+Enough of the theory for now, lets get back to practice!
+
+Check out the different types of variables of our data frame, labeled right under the headline:
+```{r }
+mpg
+```
+ 
+For example, `manufacturer` is a character variable, `displ`, the car’s engine size in litres, is a double and `year` is an integer. You can also check this by typing:
+
+```{r }
+# Compactly display the structure of an arbitrary R object
+str(mpg)
+
+# Check the command using
+?str
 ```
 
 To learn even more about `mpg` and the meaning of its variables, open its help page by running ?mpg.
@@ -68,104 +151,222 @@ To learn even more about `mpg` and the meaning of its variables, open its help p
 ?mpg
 ```
 
-Among the variables in mpg are:
 
-- `displ`, a car’s engine size, in litres.
+Let's check out the other types of variables, such as:
 
--  `hwy`, a car’s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.
+```{r }
+# We force our data frame to be a tibble in order to dynamically expand our data set
+data <- as_tibble(mpg)
 
 
-### 2. GGplot
-
-Now we will do some plotting, because a picture tells you more than thousand words. 
-To plot mpg, run this code to put `displ` on the x-axis and `hwy` on the y-axis:
-
-```{r}
-
-ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy))
+# adds a column to our tibble with a logical variable
+data %>% add_column(data$manufacturer =="audi")
+data %>% add_column("20thCentury" = data$year < 2000)
 
 ```
 
 
-The plot shows a negative relationship between engine size (`displ`) and fuel efficiency (`hwy`). In other words, cars with big engines use more fuel. Does this confirm or refute your hypothesis about fuel efficiency and engine size?
 
-With ggplot2, you begin a plot with the function `ggplot()`. `ggplot()` creates a coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So `ggplot(data = mpg)` creates an empty graph, but it’s not very interesting so I’m not going to show it here.
+#### Exercise:
+Get the length of the above created variable "manufacturer".
 
-You complete your graph by adding one or more layers to `ggplot()`. The function `geom_point()` adds a layer of points to your plot, which creates a scatterplot. ggplot2 comes with many geom functions that each add a different type of layer to a plot. You’ll learn a whole bunch of them throughout this course.
+```{r }
 
-Each geom function in ggplot2 takes a `mapping` argument. This defines how variables in your dataset are mapped to visual properties. The `mapping argument` is always paired with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. ggplot2 looks for the mapped variables in the `data` argument, in this case, `mpg`.
+# adds a column to our tibble with a logical variable
+data %>% add_column(data$manufacturer =="audi")
 
-So a very basic ggplot. template would look like this:
 
-```{r, eval = FALSE}
-ggplot(data = <DATA>) + 
-  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+# Get the length of the above created variable "manufacturer"
+???
+
 ```
+ 
+ 
+### Writing functions
+
+Recall that vectors are important as most of the functions work with vectors.
+
+You should consider writing a function whenever you’ve copied and pasted a block of code more than twice (i.e. you now have three copies of the same code). 
+
+There are three key steps to creating a new function:
+
+1. You need to pick a *name* for the function. Make sure it's reasonable!
+
+2. You list the inputs, or *arguments*, to the function inside `function`. If we had e.g. three arguments, the call would look like `function(x, y, z)`.
+
+3. You place the code you have developed in *body* of the function, a { block that immediately follows `function(...)`.
+
+Look at this function:
+
+
+```{r }
+
+count_cars <- function(tib, brand) {
   
+  sum(tib$manufacturer == brand)
   
+}
+
+count_cars(data, "ford")
+
+
+```
+
+#### Exercise!
+
+Write a function that returns how many of the cars in `mpg` were produced in 1999. FIll in the XXX and test your function in the end:
+
+
+```{r, eval = FALSE }
+
+# Function that returns how many of the cars in `mpg` were produced in 1999
+XXX <- function(XXX) {
   
-#### Intermediate exercises:
-- Run ggplot(data = mpg). What do you see?
-```{r, eval = FALSE}
-ggplot(data = mpg)
+  XXX
+  
+}
+
+# Test my function (solution: 117)
+XXX(XXX)
+
+# Can you also tell me how many were produced in 2008?
+XXX(XXX)
+
 ```
 
-- How many rows are in mpg? How many columns?
+
+An if statement allows you to conditionally execute code. It looks like this:
+
+
+```{r, eval = FALSE }
+
+if (condition) {
+  # code executed when condition is TRUE
+} else {
+  # code executed when condition is FALSE
+}
+
+```
+
+Example:
+
+```{r, eval = FALSE }
+
+if (data$year[3] == 2008) {
+  print("Car was produced in 2008")
+} else {
+  print("Car was NOT produced in 2008")
+}
+
+if (data$year[7] == 1999) {
+  print("Car was produced in 2008")
+} else {
+  print("Car was NOT produced in 2008")
+}
+
+
+# Better write a function for this!
+check_year <- function(position, year) {
+  
+  if (data$year[position] == year) {
+  print("Car was produced in ")
+  print(year)
+} else {
+  #print("Car was NOT produced in" + year )
+}
+
+}
+
+# Check the function
+check_year(3, 2008)
+
+```
+
+
+### iterations
+
+The last topic for today are for - loops.
+
+In functions, we talked about how important it is to reduce duplication in your code by creating functions instead of copying-and-pasting. Reducing code duplication has three main benefits:
+
+1. It’s easier to see the intent of your code, because your eyes are drawn to what’s different, not what stays the same.
+
+2. It’s easier to respond to changes in requirements. As your needs change, you only need to make changes in one place, rather than remembering to change every place that you copied-and-pasted the code.
+
+3. You’re likely to have fewer bugs because each line of code is used in more places.
+
+
+Consider again our example with the cars. This time, we want to know how many cars there are of each brand. We could check it out for each brand individually:
+
+
 ```{r}
 
+# get all brands
+unique(data$manufacturer)
+
+sum(data$manufacturer == "audi")
+sum(data$manufacturer == "chevrolet")
+sum(data$manufacturer == "dodge")
+# .
+# .
+# .
+sum(data$manufacturer == "volkswagen")
 ```
 
-- What does the drv variable describe? Read the help for ?mpg to find out.
-```{r}
+You might see that this is tedious and cumbersome to do for so many brands.
 
-```
+So, how to use loops?
 
-- Make a scatterplot of hwy vs cyl.
-```{r}
+Every for loop has three components:
 
-```
-- What happens if you make a scatterplot of class vs drv? Why is the plot not useful?
-```{r}
+1. The *output*: `output <- vector("double", length()/nrow()/ncol()/...)`. Before you start the loop, you must always allocate sufficient space for the output. This is very important for efficiency: if you grow the for loop at each iteration using `c()` (for example), your for loop will be very slow.
 
-```
+A general way of creating an empty vector of given length is the `vector()` function. It has two arguments: the type of the vector (“logical”, “integer”, “double”, “character”, etc) and the length of the vector.
 
 
+2. The *sequence*: `i in seq_along(data_frame)`. This determines what to loop over: each run of the for loop will assign `i` to a different value from `seq_along(df)`. It’s useful to think of `i` as a pronoun, like “it”.
 
-plot some simple things
-# pipe and data wrangling:
-
-group_by
-summarise
-filter
-
-
-
-
-```{r}
-
-```
+You might not have seen `seq_along()` before. It’s a safe version of the familiar `1:length(l)`, with an important difference: if you have a zero-length vector, `seq_along()` does the right thing:
 
 
 ```{r}
 
-```
+y <- vector("double", 0)
+seq_along(y)
+#> integer(0)
 
-###
+1:length(y)
+#> [1] 1 0
+
+```
+   
+
+You probably won’t create a zero-length vector deliberately, but it’s easy to create them accidentally. If you use `1:length(x)` instead of `seq_along(x)`, you’re likely to get a confusing error message.
+
+3. The *body*: `output[[i]] <- function(data_frame[[i]])`. This is the code that does the work. It’s run repeatedly, each time with a different value for `i`. The first iteration will run `output[[1]] <- function(data_frame[[1]])`, the second will run `output[[2]] <- function(data_frame[[2]])`, and so on.
+
+
+
+Here is what our function would look like:
 ```{r}
 
+# get all brands
+unique(data$manufacturer)
+
+# Create the output vector
+output = vector("double", length(unique(data$manufacturer)))
+
+# iterate over the brands
+for(i in seq_along(unique(data$manufacturer))) {
+  output[[i]] <- sum(data$manufacturer == unique(data$manufacturer)[i])
+}
+
+
+output
+  
 ```
 
 
+Writing functions is not easy and requires practice!
 
 
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
