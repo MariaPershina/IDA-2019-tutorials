@@ -20,31 +20,131 @@ Remark: You can also find parts of this tutorial at the webbook version of this 
 <https://r4ds.had.co.nz/index.html>.
 
 
+```{r}
+1+2
+```
 
-So to get started, we will load some packages:
+You can supress an output by setting ECHO=False
+Default eval= True. Set False if you do not want a cell to be executed. 
 
-```{r, eval = FALSE}
+Example
+
+
+```{r, echo=FALSE}
 # Run if you have not installed the packages yet
 library(devtools)
 devtools::install_github("n-kall/IDA2019-package")
 
 # Load required packages for our course
 # (You only need to install a package once, but you need to reload it every time you start a new session)
-
 library(IDA2019)
 
 # Today is all about the tidyverse, so it would also suffice to load only this package:
 library(tidyverse)
 ```
  
-## Data Handling
+# RStudio
+
+ For shortcuts see :  
+       Tools>Keyboards Shortcuts help 
+       
+The most useful: 
+      execute  --> Command/Cntrl +enter 
+      pipe  --> Shift+Command/Cntrl+m
+      comment/decomment --> Shift+Command/Cntrl+C
+      knit --> Shift+Command/Cntrl+K
+
+### Example
+```{r}
+a=3
+b=7
+a+b
+a %>% +b #pipe 
+c=a %>% +b
+c
+```
+ 
+# TExT  
+
+## Smaller TExT
+
+### Even smaller TExT
 
 
-In order to learn something about R, I have prepared some data exploration tasks for you, using the `mpg` data frame found in ggplot2 (aka `ggplot2::mpg`).
+
+## LaTeX:
+
+Equation: 
+$A = \pi*r^{2}$
+equation block:
+$$E = mc^{2}$$ 
+
+To use LaTeX consult <http://tug.ctan.org/info/undergradmath/undergradmath.pdf>
+
+
+## Tales and indexing
+Let's upload data. There are several datasets in-build in R. 
+
+In order to learn something about R, we have prepared some data exploration tasks for you, using the `mpg` data frame found in ggplot2 (aka `ggplot2::mpg`).
 The data frame mpg contains observations collected by the US Environmental Protection Agency on 38 models of car
 
-### Vectors/ data types
+```{r}
+mpg
+```
+ 
+ 
+```{r}
+data<- as_tibble(mpg)
+```
 
+To pick only several observations or variables you can use indexing: 
+data[rows, columns]
+```{r }
+data[1:5,]
+```
+
+Use head() to print first rows of your data
+
+
+```{r}
+head (mpg)
+tail(mpg)
+```
+
+For beatiful tables in markdown you can use kable() from "knitr" library.
+
+```{r }
+library("knitr")
+kable(data[1:5,], caption = "Knitr Table")
+```
+ 
+ 
+### You can always ask for help
+
+```{}
+help("kable")
+```
+
+#### Exercise
+Which data types do you have?
+
+TODO:Upload mtcars data set and  print first 5 rows of the mtcars data.
+```{r }
+
+```
+
+You can summarise data using summary(). How many observations are in the data set? What is max amount of cylinders recorded?
+
+```{r, eval=FALSE}
+summary(mpg)
+```1+2
+```
+ 
+ 
+
+ 
+
+## Vectors/ data types
 
 Vectors are particularly important as most of the functions you will write will work with vectors.
 
@@ -182,7 +282,7 @@ data %>% add_column(data$manufacturer =="audi")
 ```
  
  
-### Writing functions
+## Writing functions
 
 Recall that vectors are important as most of the functions work with vectors.
 
@@ -283,7 +383,7 @@ check_year(3, 2008)
 ```
 
 
-### iterations
+## iterations
 
 The last topic for today are for - loops.
 
@@ -367,6 +467,5 @@ output
 ```
 
 
-Writing functions is not easy and requires practice!
-
-
+We hope you are well prepared for answering the homework! 
+Do not hesitate to approach us if you have a question.
