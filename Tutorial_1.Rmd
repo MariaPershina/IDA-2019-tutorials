@@ -82,67 +82,14 @@ $$E = mc^{2}$$
 To use LaTeX consult <http://tug.ctan.org/info/undergradmath/undergradmath.pdf>
 
 
-## Tales and indexing
-Let's upload data. There are several datasets in-build in R. 
 
-In order to learn something about R, we have prepared some data exploration tasks for you, using the `mpg` data frame found in ggplot2 (aka `ggplot2::mpg`).
-The data frame mpg contains observations collected by the US Environmental Protection Agency on 38 models of car
-
-```{r}
-mpg
-```
- 
- 
-```{r}
-data<- as_tibble(mpg)
-```
-
-To pick only several observations or variables you can use indexing: 
-data[rows, columns]
-```{r }
-data[1:5,]
-```
-
-Use head() to print first rows of your data
-
-
-```{r}
-head (mpg)
-tail(mpg)
-```
-
-For beatiful tables in markdown you can use kable() from "knitr" library.
-
-```{r }
-library("knitr")
-kable(data[1:5,], caption = "Knitr Table")
-```
- 
- 
 ### You can always ask for help
 
-```{}
-help("kable")
+```{r}
+??latex
+
+help("sum")
 ```
-
-#### Exercise
-Which data types do you have?
-
-TODO:Upload mtcars data set and  print first 5 rows of the mtcars data.
-```{r }
-
-```
-
-You can summarise data using summary(). How many observations are in the data set? What is max amount of cylinders recorded?
-
-```{r, eval=FALSE}
-summary(mpg)
-```1+2
-```
- 
- 
-
- 
 
 ## Vectors/ data types
 
@@ -225,16 +172,18 @@ nrow(x)
  
 The four most important types of atomic vector are *logical*, *integer*, *double*, and *character*.
  
- 
+## Tales and indexing
+Let's upload data. There are several datasets in-build in R. 
 
- 
-Enough of the theory for now, lets get back to practice!
+In order to learn something about R, we have prepared some data exploration tasks for you, using the `mpg` data frame found in ggplot2 (aka `ggplot2::mpg`).
+The data frame mpg contains observations collected by the US Environmental Protection Agency on 38 models of car
+
 
 Check out the different types of variables of our data frame, labeled right under the headline:
-```{r }
+```{r}
 mpg
 ```
- 
+
 For example, `manufacturer` is a character variable, `displ`, the car’s engine size in litres, is a double and `year` is an integer. You can also check this by typing:
 
 ```{r }
@@ -250,7 +199,37 @@ To learn even more about `mpg` and the meaning of its variables, open its help p
 ```{r, eval = FALSE}
 ?mpg
 ```
+ 
 
+
+To pick only several observations or variables you can use indexing: 
+data[rows, columns]
+```{r }
+data[1:5,]
+```
+
+Use head() to print first rows of your data
+
+
+```{r}
+head (mpg)
+tail(mpg)
+```
+
+
+You can summarise data using summary(). How many observations are in the data set? What is max amount of cylinders recorded?
+
+```{r, eval=FALSE}
+summary(mpg)
+```
+
+For beatiful tables in markdown you can use kable() from "knitr" library.
+
+```{r }
+library("knitr")
+kable(mpg[1:5,], caption = "Knitr Table")
+```
+ 
 
 Let's check out the other types of variables, such as:
 
@@ -336,8 +315,6 @@ XXX(XXX)
 
 
 An if statement allows you to conditionally execute code. It looks like this:
-
-
 ```{r, eval = FALSE }
 
 if (condition) {
@@ -465,7 +442,6 @@ for(i in seq_along(unique(data$manufacturer))) {
 output
   
 ```
-
 
 We hope you are well prepared for answering the homework! 
 Do not hesitate to approach us if you have a question.
