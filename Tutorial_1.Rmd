@@ -73,6 +73,15 @@ c
 
 
 ## LaTeX:
+For R Markdown users who have not installed LaTeX before, it is recommend to install TinyTeX 
+```{r, echo=False}
+
+install.packages("tinytex")
+tinytex::install_tinytex()  # install TinyTeX
+
+```
+
+Now you sould be able to write beatiful math equations
 
 Equation: 
 $A = \pi*r^{2}$
