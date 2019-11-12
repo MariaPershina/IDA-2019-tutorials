@@ -8,6 +8,7 @@ output: html_document
 This is an R Markdown document.
 Throughout the course, we will work with R markdown. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. It is also useful, to combine R code and written text/ explanations.
 
+
 For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 Here is a cheatsheet where you can find the most important information about R Markdown:
@@ -20,6 +21,7 @@ Remark: You can also find parts of this tutorial at the webbook version of this 
 <https://r4ds.had.co.nz/index.html>.
 
 
+
 ```{r}
 1+2
 ```
@@ -30,7 +32,7 @@ Default eval= True. Set False if you do not want a cell to be executed.
 Example
 
 
-```{r, echo=FALSE}
+```{r}
 # Run if you have not installed the packages yet
 library(devtools)
 devtools::install_github("n-kall/IDA2019-package")
@@ -41,6 +43,10 @@ library(IDA2019)
 
 # Today is all about the tidyverse, so it would also suffice to load only this package:
 library(tidyverse)
+
+
+install.packages("rmarkdown")
+library(rmarkdown)
 ```
  
 # RStudio
@@ -50,9 +56,16 @@ library(tidyverse)
        
 The most useful: 
       execute  --> Command/Cntrl +enter 
+      run curretn chunk     --> Shift+ Command/Cntrl+ Enter
       pipe  --> Shift+Command/Cntrl+m
       comment/decomment --> Shift+Command/Cntrl+C
       knit --> Shift+Command/Cntrl+K
+      create a new chunk --> Alt+ Cmd/ Cntr +I
+      
+```{r}
+
+```
+
 
 ### Example
 ```{r}
@@ -62,6 +75,7 @@ a+b
 a %>% +b #pipe 
 c=a %>% +b
 c
+c %>% +2
 ```
  
 # TExT  
@@ -73,13 +87,8 @@ c
 
 
 ## LaTeX:
-For R Markdown users who have not installed LaTeX before, it is recommend to install TinyTeX 
-```{r, echo=False}
+For R Markdown users who have not installed LaTeX before, it is recommend to install TinyTeX or install rmarkdown pakage. 
 
-install.packages("tinytex")
-tinytex::install_tinytex()  # install TinyTeX
-
-```
 
 Now you sould be able to write beatiful math equations
 
@@ -168,9 +177,9 @@ If you want to get the length of a vector in a data frame, you cannot type `leng
 x <- c("a", "b", 1:10)
 
 # convert it to a tibble
-x <- as.tibble(x)
-
+x <- as_tibble(x)
 # get the length of the tibble
+
 length(x)
 
 # get the number of rows x is composed of
@@ -235,6 +244,8 @@ summary(mpg)
 For beatiful tables in markdown you can use kable() from "knitr" library.
 
 ```{r }
+print.mpg
+
 library("knitr")
 kable(mpg[1:5,], caption = "Knitr Table")
 ```
@@ -288,6 +299,12 @@ Look at this function:
 
 
 ```{r }
+
+sum_new <- function(x,y) {
+  x+y
+}
+
+sum_new(5,6)
 
 count_cars <- function(tib, brand) {
   
@@ -435,6 +452,11 @@ You probably won’t create a zero-length vector deliberately, but it’s easy t
 
 Here is what our function would look like:
 ```{r}
+
+vect<- vector("double", 0)
+for (year in c(2010,2011,2012,2013,2014,2015)){
+  vect <- c(vect, paste("The year is", year))
+}
 
 # get all brands
 unique(data$manufacturer)
