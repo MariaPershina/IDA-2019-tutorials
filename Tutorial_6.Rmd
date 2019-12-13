@@ -9,17 +9,31 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
+## Tutorial 6 
 
 This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
-## Slide with Bullets
+## Content 
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+- Bootstrapping  
+- Probability recap
+
+- Statistical Models 
+    + what is a model
+    + why do we need them 
+    + models vs distributions (add plots!!!!)
+    + exercise : which model to use for an experiment
+    + demos with wrong models...
+
+- Parameters
+    + plots
+    + priors (which priors???)
+    
+- Frequentists vs. Bayesians
+
+![](./Freq_vs_bias.png)
 
 ## Slide with R Output
 
