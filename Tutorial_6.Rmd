@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-```{r, echo=FALSE, include=FALSE}
+```{r,include=FALSE}
 library(tidyverse)
 library(cowplot)
 library(likelihood)
@@ -51,13 +51,14 @@ Standard Deviation: $\sigma=\sqrt{n(p)(1-p)}$
 ## Example
 Each day of a month a student learns 10 new words
 Aprox. 10% would be forgotten 
-```{r}
+```{r, echo=TRUE}
 forgotten <- rbinom(30, 10,.10)
 plot(forgotten)
 ```
 
+## More on Binomial distribution
 
-```{r}
+```{r, echo=TRUE}
 ### <b>
 dens<- dbinom(30, 300, .1) #probability density distribution   
 prob <- pbinom(30, 300, .1) #cumulative probability of an event.
@@ -68,11 +69,6 @@ round(prob,3)
 quantile
 ```
 
-
-```{r}
-# dbinom r - calculate binomial probability in r
-dbinom(3, size=30, prob=0.1)
-```
 
 
 ## Normal
@@ -86,14 +82,16 @@ $$P(x) = \frac{1}{\sigma*\sqrt{2\pi}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} $$
 If $\mu=0$ and $\sigma=1$ It is called standart normal distribution
 
 ## Example
-```{r}
+
+```{r, echo=TRUE}
 norm <- rnorm(100)
 mu<- mean(norm)
 median_ <- median(norm)
 plot(norm, main=paste("Mean:",round(mu,2), "Median:", round(median_,2) )) 
 ```
 
-```{r}
+## Density
+```{r, echo=TRUE}
 dens <-density(norm)
 plot(dens, main = "Density of sampled data")
 ```
@@ -101,7 +99,8 @@ plot(dens, main = "Density of sampled data")
 
 
 ## Sampling
-```{r}
+
+```{r, echo=TRUE}
 ### <b>
 mu <- 100 
 sigma <- 15
@@ -120,7 +119,7 @@ for(i in 1:n_samples){
 ```
 
 ## Plot 
-```{r, warning= FALSE, message=FALSE}
+```{r}
 simulation %>%
   ggplot(aes(x = x)) +
   geom_histogram(binwidth = 1) +
@@ -132,8 +131,8 @@ simulation %>%
 ```
 
 ## Sampling mean
-```{r, warning= FALSE, message=FALSE}
-### <b>
+```{r, warning= FALSE, message=FALSE, echo=TRUE}
+
 sample_size <- 14 
 sample_means <- tibble(sample = 1:n_samples,
                            mean = NA,
@@ -145,8 +144,9 @@ for(i in 1:n_samples){
                          sd = sigma)
   sample_means$mean[i] <- mean(sample_values)
 }
-### </b>
 ```
+
+## Plot sampled mean
 
 ```{r}
 sample_means %>%
@@ -166,11 +166,6 @@ sample_means %>%
 
 ## Log likelyhood 
 $$\log\prod x_i=log\sum x_i$$
-
-```{r}
-x = rnorm(50,50,10)
-
-```
 
 
 ## Which model to use? {.build}
