@@ -260,8 +260,61 @@ sample_means %>%
 - $\delta$ indicates differencies between the means
 
 
-## Log likelihood 
-$$\log\prod x_i=log\sum x_i$$
+## likelyhood {.bigger}
+Likelihood   -  the likeliness of different parameters of a  distribution. In a sence it is a quantitative measure of model fit.
+
+```{r, echo=TRUE}
+#likelyhood that p==0.5 for a coin which fall head up 2 times out of 
+#4 tosses
+lik1<- dbinom(2, size=4, prob=0.5, log=FALSE)
+
+#likelyhood that p==0.5 for a coin which fall head up 4 times out of 
+#4 tosses
+lik2 <- dbinom(4, size=4, prob=0.5, log=FALSE)
+lik1
+lik2
+
+```
+
+## Likilihood plot
+```{r}
+p <- seq(0.01, 1, by=0.01) 
+Lik <- numeric(length=100)
+for(i in 1:100){
+  Lik[i] <- prod(dbinom(2,size=4,prob=p[i]))
+}
+plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="2 heads in 4 trials")
+```
+
+
+## Likilihood plot
+
+```{r}
+p <- seq(0.01, 1, by=0.01) 
+Lik <- numeric(length=100)
+for(i in 1:100){
+  Lik[i] <- prod(dbinom(4,size=4,prob=p[i]))
+}
+plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="4 heads in 4 trials")
+```
+
+
+
+## Log likelyhood 
+Log transformations needed to make working with likelihoods easier!
+$\log\prod x_i=log\sum x_i$
+Thus, even if you have very small numbers LL does not converge to zero!
+```{r}
+# plot out the log-likelihood
+
+p <- seq(0.01, 1, by=0.01)
+LogLik <- numeric(length=100)
+for(i in 1:100){
+  LogLik[i] <- sum(dbinom(2, size=4, 
+  prob=p[i],log=TRUE))
+}
+plot(LogLik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Log Likelihood")
+```
 
 
 ## Which model to use? {.build}
