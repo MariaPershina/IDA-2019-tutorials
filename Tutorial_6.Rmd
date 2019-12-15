@@ -98,11 +98,11 @@ plot(forgotten)
 ## More on Binomial distribution
 
 ```{r, echo=TRUE}
-### <b>
 dens<- dbinom(30, 300, .1) #probability density distribution   
 prob <- pbinom(30, 300, .1) #cumulative probability of an event.
-quantile<- qbinom(0.54, 300, .1) # takes the probability value and gives a number whose cumulative value matches the probability value
-### </b>
+quantile<- qbinom(0.54, 300, .1) # takes the probability value 
+#and gives a number whose cumulative value matches the probability value
+
 round(dens, 3)
 round(prob,3)
 quantile
@@ -226,10 +226,17 @@ Likelihood   -  the likeliness of different parameters of a  distribution. In a 
 ```{r, echo=TRUE}
 #likelyhood that p==0.5 for a coin which fall head up 2 times out of 
 #4 tosses
-lik<- dbinom(2, size=4, prob=0.5, log=FALSE)
-lik
+lik1<- dbinom(2, size=4, prob=0.5, log=FALSE)
+
+#likelyhood that p==0.5 for a coin which fall head up 4 times out of 
+#4 tosses
+lik2 <- dbinom(4, size=4, prob=0.5, log=FALSE)
+lik1
+lik2
+
 ```
 
+## Likilihood plot
 ```{r}
 p <- seq(0.01, 1, by=0.01) 
 Lik <- numeric(length=100)
@@ -239,15 +246,8 @@ for(i in 1:100){
 plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="2 heads in 4 trials")
 ```
 
-## Likelyhood 
-```{r, echo=TRUE}
-#likelyhood that p==0.5 for a coin which fall head up 4 times out of 
-#4 tosses
-lik <- dbinom(4, size=4, prob=0.5, log=FALSE)
-lik
-```
 
-
+## Likilihood plot
 
 ```{r}
 p <- seq(0.01, 1, by=0.01) 
@@ -260,13 +260,10 @@ plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="
 
 
 
-## Log likelyhood {.bigger}
-
+## Log likelyhood 
 Log transformations needed to make working with likelihoods easier!
-
-$$\log\prod x_i=log\sum x_i$$
+$\log\prod x_i=log\sum x_i$
 Thus, even if you have very small numbers LL does not converge to zero!
-
 ```{r}
 # plot out the log-likelihood
 
