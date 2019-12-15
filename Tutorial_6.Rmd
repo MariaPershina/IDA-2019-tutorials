@@ -1,6 +1,6 @@
 ---
-title: "Tutirial_6"
-author: "Maria"
+title: "Tutorial_6"
+author: "Maria, Marc"
 date: "12/13/2019"
 output: ioslides_presentation
 ---
@@ -8,12 +8,6 @@ output: ioslides_presentation
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
-
-## Tutorial 6 
-
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
 ## Content 
 
@@ -35,15 +29,52 @@ When you click the **Knit** button a document will be generated that includes bo
 
 ![](./Freq_vs_bias.png)
 
-## Slide with R Output
+## Bootstrapping
+- to do sth *by one's own bootstraps*
+    + to do sth by one's own initiative and effort, with little to no assistance
 
-```{r cars, echo = TRUE}
-summary(cars)
-```
+- in statistics
+    + idea: we have limited data at hand and we need to put in our own "effort" to get the most out of the data
+    + practice: random **re-samples with replacement**
 
-## Slide with Plot
 
+## Bootstrapping    
+- specifically for 95% **Confidence Intervals** (e.g. of the mean)
+    + vector $D$ with length $k$
+    
+    <br>
+    1. take $k$ samples (**with replacement!**) from $D$, gather them in a vector $D^{rep}$
+    2. compute $\mu(D^{rep})$ and add it to the vector $\mu_{sampled}$
+    3. repeat 1 and 2
+    4. **lower bound** of the 95% CI = **2.5% quantile** of $\mu_{sampled}$
+    5. **upper bound** of the 95% CI = **97.5% quantile** of $\mu_{sampled}$
+
+
+## Probability Recap
+- **marginal**: the prob. of one event happening
+    + e.g. $P(heads) = \frac{1}{2}, \ P(spades) = \frac{1}{4}$
+
+- **joint**: the prob. of many events happening at the same time
+    + if *heads* and *spades* are independent: $P(heads, \ spades) = P(heads) \cdot (spades)$
+
+<br>
+
+- **conditional**: the prob. of an event when you know another event already happened
+    + $P(A \ | \ B) = \frac{P(A, \ B)}{P(B)}$
+    + e.g. $P(heads) = \frac{1}{2}, \ P(heads \ | \ unfair) = \frac{3}{4}$
+    
+    
+## Bayes' Rule
+- $P(\theta \ | \ D) = \frac{P(D \ | \ \theta) \cdot P(\theta)}{P(D)}$
+
+- **rewrite** a certain probability in terms of **other probabilities** that might be much easier to compute
+- gain insight into the ***unobservable*** causes of any given observation
+    + for data analysis: starting from the **raw data**, gain insight into the (parameters of the) **underlying distribution** that generated the data at hand
+    
+## Bayes' Rule: Example (if needed)
+
+## Parameters
+- Insert plot grid of standard distributions here
 ```{r pressure}
 plot(pressure)
 ```
-
