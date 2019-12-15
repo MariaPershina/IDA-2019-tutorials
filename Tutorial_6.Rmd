@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r, echo=FALSE, include=FALSE}
 library(tidyverse)
 library(cowplot)
+library(likelihood)
 ```
 
 ## Tutorial 6 
@@ -159,14 +160,21 @@ sample_means %>%
 
 
 ## T-model
+- used to compare means of two distrubutions
+- both distributions  should come from on family (e.g.normal)
+- $\delta$ indicates differencies between the means
+
+## Log likelyhood 
+$$\log\prod x_i=log\sum x_i$$
 
 ```{r}
+x = rnorm(50,50,10)
 
 ```
 
 
-## Which model to use?
-
+## Which model to use? {.build}
+    - if you are intrested how much beer should you buy for a party?
     - if you want to check if male height is different among Norh and South Corenians?
     -  if you want to check whether a new drink increases sense of humor?
 
