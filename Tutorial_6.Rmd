@@ -26,15 +26,53 @@ library(likelihood)
 - Parameters
 - Frequentists vs. Bayesians
 
-## Statistical Models 
-    + what is a model
+## Bootstrapping
+- to do sth *by one's own bootstraps*
+    + to do sth by one's own initiative and effort, with little to no assistance
+
+- in statistics
+    + idea: we have limited data at hand and we need to put in our own "effort" to get the most out of the data
+    + practice: random **re-samples with replacement**
+
+
+## Bootstrapping    
+- specifically for 95% **Confidence Intervals** (e.g. of the mean)
+    + vector $D$ with length $k$
     
-    + why do we need them 
-    + models vs distributions (add plots!!!!)
- 
+    <br>
+    1. take $k$ samples (**with replacement!**) from $D$, gather them in a vector $D^{rep}$
+    2. compute $\mu(D^{rep})$ and add it to the vector $\mu_{sampled}$
+    3. repeat 1 and 2
+    4. **lower bound** of the 95% CI = **2.5% quantile** of $\mu_{sampled}$
+    5. **upper bound** of the 95% CI = **97.5% quantile** of $\mu_{sampled}$
+
+
+## Probability Recap
+- **marginal**: the prob. of one event happening
+    + e.g. $P(heads) = \frac{1}{2}, \ P(spades) = \frac{1}{4}$
+
+- **joint**: the prob. of many events happening at the same time
+    + if *heads* and *spades* are independent: $P(heads, \ spades) = P(heads) \cdot (spades)$
+
+<br>
+
+- **conditional**: the prob. of an event when you know another event already happened
+    + $P(A \ | \ B) = \frac{P(A, \ B)}{P(B)}$
+    + e.g. $P(heads) = \frac{1}{2}, \ P(heads \ | \ unfair) = \frac{3}{4}$
+    
+    
+## Bayes' Rule
+- $P(\theta \ | \ D) = \frac{P(D \ | \ \theta) \cdot P(\theta)}{P(D)}$
+
+- **rewrite** a certain probability in terms of **other probabilities** that might be much easier to compute
+- gain insight into the ***unobservable*** causes of any given observation
+    + for data analysis: starting from the **raw data**, gain insight into the (parameters of the) **underlying distribution** that generated the data at hand
+    
+## Bayes' Rule: Example (if needed)
+
     
 ## Binomial
-
+Used to count the number k of successes out of N trials 
  $$P(A) = \binom{N}{k} \cdot p^k(1-p)^{N-k}$$
 
 
@@ -77,7 +115,7 @@ $$P(x) = \frac{1}{\sigma*\sqrt{2\pi}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} $$
  
 - mean, median and mode of the distribution coincide
 - curve of the distribution is symmetrical about the mean.
-- total area under the curve is 1.
+- total area under the curve is 1 (as for all continuous distributions).
 
 If $\mu=0$ and $\sigma=1$ It is called standart normal distribution
 
@@ -97,7 +135,24 @@ plot(dens, main = "Density of sampled data")
 ```
 
 
-
+## Parameters
+- Insert plot grid of standard distributions here
+```{r}
+sample_size <- 10000
+x <- seq(-5, 5, length = sample_size)
+normal_dists <- tibble(
+    x = x, 
+    y_standard = dnorm(x, mean = 0, sd = 1),
+    y_shifted = dnorm(x, mean = 3.75, sd = 1),
+    y_tight = dnorm(x, mean = 0, sd = 0.5),
+    y_wide = dnorm(x, mean = 0, sd = 2),
+)
+ggplot(data = normal_dists) +
+    geom_line(mapping = aes(x = x, y = y_standard)) +
+    geom_line(mapping = aes(x = x, y = y_shifted), color = "blue") +
+    geom_line(mapping = aes(x = x, y = y_tight), color = "red") +
+    geom_line(mapping = aes(x = x, y = y_wide), color = "green")
+```
 ## Sampling
 
 ```{r, echo=TRUE}
@@ -106,20 +161,15 @@ mu <- 100
 sigma <- 15
 n_samples <- 10000
 
-simulation <- tibble(sample = 1:n_samples, x = NA)
-for(i in 1:n_samples){
-  # sample a set of values
-  sample_value <- rnorm(n = 1,
-                         mean = mu,
-                         sd = sigma)
-  # save value to data frame
-  simulation$x[i] <- sample_value
-}
+simulation <- tibble(sample = 1:n_samples,
+                     x = rnorm(n = n_samples, 
+                               mean = mu, 
+                               sd = sigma))
 ### </b>
 ```
 
 ## Plot 
-```{r}
+```{r, warning= FALSE, message=FALSE}
 simulation %>%
   ggplot(aes(x = x)) +
   geom_histogram(binwidth = 1) +
@@ -139,7 +189,7 @@ sample_means <- tibble(sample = 1:n_samples,
                            std_dev = NA)
 
 for(i in 1:n_samples){
-  sample_values <- rnorm(n = sample_size <- 14 ,
+  sample_values <- rnorm(n = sample_size,
                          mean = mu,
                          sd = sigma)
   sample_means$mean[i] <- mean(sample_values)
@@ -148,7 +198,7 @@ for(i in 1:n_samples){
 
 ## Plot sampled mean
 
-```{r}
+```{r, message=FALSE, echo=TRUE}
 sample_means %>%
   ggplot(aes(mean)) +
   geom_histogram(binwidth = 1) +
@@ -169,8 +219,13 @@ $$\log\prod x_i=log\sum x_i$$
 
 
 ## Which model to use? {.build}
-    - if you are intrested how much beer should you buy for a party?
+
+    - if you are intrested how much beer should you buy for a party? 
+    
+    
     - if you want to check if male height is different among Norh and South Corenians?
+    
+    
     -  if you want to check whether a new drink increases sense of humor?
 
 
