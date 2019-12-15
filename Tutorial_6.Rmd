@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r,include=FALSE}
 library(tidyverse)
 library(cowplot)
-library(likelihood)
+# library(likelihood)
 ```
 
 ## Tutorial 6 
@@ -37,6 +37,7 @@ library(likelihood)
 
  $$P(A) = \binom{N}{k} \cdot p^k(1-p)^{N-k}$$
 
+<!-- I would include the purpose of the binomial model, i.e. you want to count the number k of successes out of N trials  -->
 
 Three assumptions:
  - only two possible outcomes (success or failure)
@@ -60,7 +61,7 @@ plot(forgotten)
 
 ```{r, echo=TRUE}
 ### <b>
-dens<- dbinom(30, 300, .1) #probability density distribution   
+dens<- dbinom(30, 300, .1)#probability density distribution   
 prob <- pbinom(30, 300, .1) #cumulative probability of an event.
 quantile<- qbinom(0.54, 300, .1) # takes the probability value and gives a number whose cumulative value matches the probability value
 ### </b>
@@ -77,9 +78,11 @@ $$P(x) = \frac{1}{\sigma*\sqrt{2\pi}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} $$
  
 - mean, median and mode of the distribution coincide
 - curve of the distribution is symmetrical about the mean.
-- total area under the curve is 1.
 
-If $\mu=0$ and $\sigma=1$ It is called standart normal distribution
+<!-- true, but maybe it would be nice to say that this is a common thing for all continuous distributions, it's not specific to the normal distribution -->
+- total area under the curve is 1. 
+
+If $\mu=0$ and $\sigma=1$ It is called standard normal distribution
 
 ## Example
 
@@ -107,6 +110,10 @@ sigma <- 15
 n_samples <- 10000
 
 simulation <- tibble(sample = 1:n_samples, x = NA)
+
+# Maybe you could use this instead of the for-loop? Should lead to the same tibble
+# simulation <- tibble(sample = 1:n_samples, x = rnorm(n = n_samples, mean = mu, sd = sigma))
+
 for(i in 1:n_samples){
   # sample a set of values
   sample_value <- rnorm(n = 1,
@@ -158,20 +165,20 @@ sample_means %>%
   theme_classic()
 ```
 
-
 ## T-model
 - used to compare means of two distrubutions
-- both distributions  should come from on family (e.g.normal)
-- $\delta$ indicates differencies between the means
+- both distributions  should come from one family (e.g.normal)
+- $\delta$ indicates differences between the means
 
-## Log likelyhood 
+<!-- Maybe a few more details on the purpose / application of the likelihood would be nice -->
+## Log likelihood 
 $$\log\prod x_i=log\sum x_i$$
 
 
 ## Which model to use? {.build}
-    - if you are intrested how much beer should you buy for a party?
-    - if you want to check if male height is different among Norh and South Corenians?
-    -  if you want to check whether a new drink increases sense of humor?
+    - if you are intrested in how much beer should you buy for a party?
+    - if you want to check if male height is different among Norh and South Koreans?
+    - if you want to check whether a new drink increases sense of humor?
 
 
     
