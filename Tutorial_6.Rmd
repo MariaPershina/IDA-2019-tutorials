@@ -9,6 +9,11 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{r}
+library(tidyverse)
+```
+
+
 ## Content 
 
 - Bootstrapping  
@@ -75,6 +80,24 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Parameters
 - Insert plot grid of standard distributions here
-```{r pressure}
-plot(pressure)
+```{r}
+sample_size <- 10000
+x <- seq(-5, 5, length = sample_size)
+
+normal_dists <- tibble(
+    x = x, 
+    y_standard = dnorm(x, mean = 0, sd = 1),
+    y_shifted = dnorm(x, mean = 3.75, sd = 1),
+    y_tight = dnorm(x, mean = 0, sd = 0.5),
+    y_wide = dnorm(x, mean = 0, sd = 2),
+)
+
+ggplot(data = normal_dists) +
+    geom_line(mapping = aes(x = x, y = y_standard)) +
+    geom_line(mapping = aes(x = x, y = y_shifted), color = "blue") +
+    geom_line(mapping = aes(x = x, y = y_tight), color = "red") +
+    geom_line(mapping = aes(x = x, y = y_wide), color = "green")
 ```
+
+
+
