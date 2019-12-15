@@ -14,10 +14,11 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(cowplot)
 library(likelihood)
+library(stats)
 ```
 
 ## Tutorial 6 
-### Content 
+### Content {.bigger}
 
 - Bootstrapping  
 - Probability recap
@@ -26,7 +27,7 @@ library(likelihood)
 - Parameters
 - Frequentists vs. Bayesians
 
-## Bootstrapping
+## Bootstrapping {.bigger}
 - to do sth *by one's own bootstraps*
     + to do sth by one's own initiative and effort, with little to no assistance
 
@@ -71,7 +72,7 @@ library(likelihood)
 ## Bayes' Rule: Example (if needed)
 
     
-## Binomial
+## Binomial {.bigger}
 Used to count the number k of successes out of N trials 
  $$P(A) = \binom{N}{k} \cdot p^k(1-p)^{N-k}$$
 
@@ -109,7 +110,7 @@ quantile
 
 
 
-## Normal
+## Normal {.bigger}
 
 $$P(x) = \frac{1}{\sigma*\sqrt{2\pi}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} $$
  
@@ -153,10 +154,12 @@ ggplot(data = normal_dists) +
     geom_line(mapping = aes(x = x, y = y_tight), color = "red") +
     geom_line(mapping = aes(x = x, y = y_wide), color = "green")
 ```
+
+
 ## Sampling
 
 ```{r, echo=TRUE}
-### <b>
+
 mu <- 100 
 sigma <- 15
 n_samples <- 10000
@@ -165,7 +168,7 @@ simulation <- tibble(sample = 1:n_samples,
                      x = rnorm(n = n_samples, 
                                mean = mu, 
                                sd = sigma))
-### </b>
+
 ```
 
 ## Plot 
@@ -198,7 +201,7 @@ for(i in 1:n_samples){
 
 ## Plot sampled mean
 
-```{r, message=FALSE, echo=TRUE}
+```{r, message=FALSE,warning=FALSE, echo=FALSE}
 sample_means %>%
   ggplot(aes(mean)) +
   geom_histogram(binwidth = 1) +
@@ -210,25 +213,87 @@ sample_means %>%
 
 
 ## T-model
+
+
 - used to compare means of two distrubutions
 - both distributions  should come from on family (e.g.normal)
 - $\delta$ indicates differencies between the means
 
-## Log likelyhood 
+
+## likelyhood {.bigger}
+Likelihood   -  the likeliness of different parameters of a  distribution. In a sence it is a quantitative measure of model fit.
+
+```{r, echo=TRUE}
+#likelyhood that p==0.5 for a coin which fall head up 2 times out of 
+#4 tosses
+lik<- dbinom(2, size=4, prob=0.5, log=FALSE)
+lik
+```
+
+```{r}
+p <- seq(0.01, 1, by=0.01) 
+Lik <- numeric(length=100)
+for(i in 1:100){
+  Lik[i] <- prod(dbinom(2,size=4,prob=p[i]))
+}
+plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="2 heads in 4 trials")
+```
+
+## Likelyhood 
+```{r, echo=TRUE}
+#likelyhood that p==0.5 for a coin which fall head up 4 times out of 
+#4 tosses
+lik <- dbinom(4, size=4, prob=0.5, log=FALSE)
+lik
+```
+
+
+
+```{r}
+p <- seq(0.01, 1, by=0.01) 
+Lik <- numeric(length=100)
+for(i in 1:100){
+  Lik[i] <- prod(dbinom(4,size=4,prob=p[i]))
+}
+plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="4 heads in 4 trials")
+```
+
+
+
+## Log likelyhood {.bigger}
+
+Log transformations needed to make working with likelihoods easier!
+
 $$\log\prod x_i=log\sum x_i$$
+Thus, even if you have very small numbers LL does not converge to zero!
+
+```{r}
+# plot out the log-likelihood
+
+p <- seq(0.01, 1, by=0.01)
+LogLik <- numeric(length=100)
+for(i in 1:100){
+  LogLik[i] <- sum(dbinom(2, size=4, 
+  prob=p[i],log=TRUE))
+}
+plot(LogLik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Log Likelihood")
+```
 
 
-## Which model to use? {.build}
+## Which model to use? {.build .bigger}
+
+
 
     - if you are intrested how much beer should you buy for a party? 
     
-    
+
+
+
     - if you want to check if male height is different among Norh and South Corenians?
     
+
     
     -  if you want to check whether a new drink increases sense of humor?
-
-
     
 ## Frequentists vs. Bayesians
 
