@@ -1,5 +1,5 @@
 ---
-title: "Tutorial_6"
+title: "Tutorial 6"
 author: "Maria, Marc"
 date: "12/13/2019"
 output: ioslides_presentation
@@ -9,30 +9,23 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r}
+```{r, message = FALSE, echo = FALSE}
 library(tidyverse)
+library(cowplot)
+library(likelihood)
 ```
 
-
-## Content 
+## Tutorial 6 
+### Overview 
 
 - Bootstrapping  
 - Probability recap
-
-- Statistical Models 
-    + what is a model
-    + why do we need them 
-    + models vs distributions (add plots!!!!)
-    + exercise : which model to use for an experiment
-    + demos with wrong models...
-
-- Parameters
-    + plots
-    + priors (which priors???)
-    
+- Models
+    + Formal definition
+    + Binomial
+    + Normal
+- Parameters and Priors
 - Frequentists vs. Bayesians
-
-![](./Freq_vs_bias.png)
 
 ## Bootstrapping
 - to do sth *by one's own bootstraps*
@@ -56,7 +49,7 @@ library(tidyverse)
 
 
 ## Probability Recap
-- **marginal**: the prob. of one event happening
+- **marginal**: the prob. of one event happening without considering any other events that might play a role
     + e.g. $P(heads) = \frac{1}{2}, \ P(spades) = \frac{1}{4}$
 
 - **joint**: the prob. of many events happening at the same time
@@ -78,10 +71,116 @@ library(tidyverse)
     
 ## Bayes' Rule: Example (if needed)
 
-## Parameters
-- Insert plot grid of standard distributions here
+
+## Models
+- A **statistical model** is a simple and elegant mathematical **representation of a random process**
+    + captures the essence of the random process and leaves out all the irrelevant details
+
+- A model $M$ consists of
+    + a dataset $D$ with **independent variables** $D_{IV}$ and **dependent variables** $D_{DV}$
+    + a **likelihood function** $P_M(D_{DV} \ | \ D_{IV}, \theta)$
+    + the model's **free parameters** $\theta$ allow you to fine-tune the model to your specific problem
+    + **Bayesian models** additionally have a **prior distribution** $P_M(\theta)$
+
+## Models vs Distributions
+- What is the difference between a model and a distribution?
 ```{r}
-sample_size <- 10000
+# YOUR ANSWER HERE
+```
+
+    
+## Binomial distribution
+- Used to count the number $k$ of successes out of $N$ trials in a **binary** random process
+ $$P(A) = \binom{N}{k} \cdot p^k(1-p)^{N-k}$$
+ 
+- Three assumptions:
+    + only **two possible outcomes** (success or failure)
+    + probability of success is the **same for each trial**
+    + the trials are **independent**
+
+Mean: $\mu = np$
+
+
+Standard Deviation: $\sigma=\sqrt{n(p)(1-p)}$
+
+
+## Binomial distribution: Example
+Each day of a month a student learns 10 new words
+Aprox. 10% would be forgotten 
+```{r, echo=TRUE}
+forgotten <- rbinom(30, 10,.10)
+plot(forgotten)
+```
+
+## More on Binomial distribution
+
+```{r, echo=TRUE}
+### <b>
+dens<- dbinom(30, 300, .1) #probability density distribution   
+prob <- pbinom(30, 300, .1) #cumulative probability of an event.
+quantile<- qbinom(0.54, 300, .1) # takes the probability value and gives a number whose cumulative value matches the probability value
+### </b>
+round(dens, 3)
+round(prob,3)
+quantile
+```
+
+
+## Binomial distribution: Parameters
+- Given the plot below, in which way do the the parameters $k$ (number of successes) and $N$ (number of trials) affect the normal distribution?
+```{r}
+sample_size <- 100
+x <- 1:sample_size
+
+binomial_dists <- tibble(
+    x = x, 
+    y_standard = dbinom(x, size = sample_size, prob = 0.5),
+    y_low_bias = dbinom(x, size = sample_size, prob = 0.25),
+    y_high_bias = dbinom(x, size = sample_size, prob = 0.75),
+    y_small_size = dbinom(x, size = 50, prob = 0.5)
+)
+
+# What do you expect the commented lines to look like in the plot?
+ggplot(data = binomial_dists, mapping = aes(x = x)) +
+    # geom_line(mapping = aes(y = y_standard)) +
+    # geom_line(mapping = aes(y = y_low_bias), colour = "red") +
+    # geom_line(mapping = aes(y = y_high_bias), colour = "green") +
+    # geom_line(mapping = aes(y = y_small_size), colour = "blue") +
+    xlab("number of successes k") +
+    ylab("probability density")
+```
+
+
+## Normal distribution
+
+$$P(x) = \frac{1}{\sigma*\sqrt{2\pi}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} $$
+ 
+- mean, median and mode of the distribution coincide
+- curve of the distribution is symmetrical about the mean.
+- total area under the curve is 1 (as for all continuous distributions).
+
+If $\mu=0$ and $\sigma=1$ It is called standart normal distribution
+
+## Normal distribution: Example
+
+```{r, echo=TRUE}
+norm <- rnorm(100)
+mu<- mean(norm)
+median_ <- median(norm)
+plot(norm, main=paste("Mean:",round(mu,2), "Median:", round(median_,2) )) 
+```
+
+## Normal distribution: Density
+```{r, echo=TRUE}
+dens <-density(norm)
+plot(dens, main = "Density of sampled data")
+```
+
+
+## Normal distribution: Parameters
+- Given the plot below, in which way do the the parameters $\mu$ (mean) and $\sigma$ (sd) affect the normal distribution?
+```{r}
+sample_size <- 1000
 x <- seq(-5, 5, length = sample_size)
 
 normal_dists <- tibble(
@@ -92,12 +191,120 @@ normal_dists <- tibble(
     y_wide = dnorm(x, mean = 0, sd = 2),
 )
 
-ggplot(data = normal_dists) +
-    geom_line(mapping = aes(x = x, y = y_standard)) +
-    geom_line(mapping = aes(x = x, y = y_shifted), color = "blue") +
-    geom_line(mapping = aes(x = x, y = y_tight), color = "red") +
-    geom_line(mapping = aes(x = x, y = y_wide), color = "green")
+# What do you expect the commented lines to look like in the plot?
+ggplot(data = normal_dists, mapping = aes(x = x)) +
+    # geom_line(mapping = aes(y = y_standard)) +
+    # geom_line(mapping = aes(y = y_shifted), color = "red") +
+    # geom_line(mapping = aes(y = y_tight), color = "green") +
+    # geom_line(mapping = aes(y = y_wide), color = "blue") +
+    ylab("probability density")
+```
+
+## Normal distribution: Sampling
+```{r, echo=TRUE}
+### <b>
+mu <- 100 
+sigma <- 15
+n_samples <- 10000
+
+simulation <- tibble(
+    sample = 1:n_samples, 
+    x = rnorm(n = n_samples, mean = mu, sd = sigma)
+)
+### </b>
+```
+
+## Normal distribution: Plot 
+```{r, warning= FALSE, message=FALSE}
+simulation %>%
+  ggplot(aes(x = x)) +
+  geom_histogram(binwidth = 1) +
+  scale_x_continuous(limits = c(50, 150)) +
+  xlab("value") +
+  ylab("Frequency") +
+  ylim(0,300) +
+  theme_classic()
+```
+
+## Normal distribution: Sampling mean
+```{r, warning= FALSE, message=FALSE, echo=TRUE}
+
+sample_size <- 14 
+sample_means <- tibble(sample = 1:n_samples,
+                           mean = NA,
+                           std_dev = NA)
+
+for(i in 1:n_samples){
+  sample_values <- rnorm(n = sample_size,
+                         mean = mu,
+                         sd = sigma)
+  sample_means$mean[i] <- mean(sample_values)
+}
+```
+
+## Normal distribution: Plot sampled mean
+```{r, message=FALSE, echo=TRUE}
+sample_means %>%
+  ggplot(aes(mean)) +
+  geom_histogram(binwidth = 1) +
+ scale_x_continuous(limits = c(50, 150))+
+  xlab("Sampled mean") +
+  ylab("Frequency") +
+  theme_classic()
 ```
 
 
+## T-model
+- used to compare means of two distrubutions
+- both distributions  should come from on family (e.g.normal)
+- $\delta$ indicates differencies between the means
 
+
+## Log likelihood 
+$$\log\prod x_i=log\sum x_i$$
+
+
+## Which model to use? {.build}
+
+    - if you are intrested how much beer should you buy for a party? 
+    
+    - if you want to check if male height is different among Norh and South Corenians?
+    
+    - if you want to check whether a new drink increases sense of humor?
+
+
+## Priors: Exercise
+```{r}
+sample_size <- 100
+x <- seq(0, 1, length = sample_size)
+
+beta_dists <- tibble(
+    x = x, 
+    y_flat = dbeta(x, shape1 = 1, shape2 = 1),
+    y_strong = dbeta(x, shape1 = 30, shape2 = 40),
+    y_weak = dbeta(x, shape1 = 3, shape2 = 2)
+)
+
+# What do these plots represent?
+ggplot(data = beta_dists, mapping = aes(x = x)) +
+    geom_line(mapping = aes(y = y_flat)) +
+    geom_line(mapping = aes(y = y_strong), color = "red") +
+    geom_line(mapping = aes(y = y_weak), color = "green") +
+    xlab(expression(theta)) +
+    ylab(expression(P(theta)))
+```
+
+
+## Priors
+- represent the modeller's **subjective** *a priori* beliefs about the random process at hand
+- may also just be used **pragmatically** to make calculations and statistical reasoning more elegant
+
+- priors **restrict the range of values** any given parameter can take
+    + **strongly informative** prior restrict the range a lot
+    + **weakly informative** priors restrict the range only a bit
+    + **uninformative** priors do not restrict the range, they assume all parameter values are equally likely
+    
+    
+## Frequentists vs. Bayesians
+
+![](./Freq_vs_bias.png)
