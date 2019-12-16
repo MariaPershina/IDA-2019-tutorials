@@ -128,7 +128,7 @@ quantile
 
 
 ## Binomial distribution: Parameters
-- Given the plot below, in which way do the the parameters $k$ (number of successes) and $N$ (number of trials) affect the normal distribution?
+- Given the plot below, in which way do the the parameters $k$ (number of successes) and $N$ (number of trials) affect the binomial distribution?
 ```{r}
 sample_size <- 100
 x <- 1:sample_size
@@ -141,14 +141,14 @@ binomial_dists <- tibble(
     y_small_size = dbinom(x, size = 50, prob = 0.5)
 )
 
-# What do you expect the commented lines to look like in the plot?
+# What do you expect the geom_lines to look like in the plot?
 ggplot(data = binomial_dists, mapping = aes(x = x)) +
-    # geom_line(mapping = aes(y = y_standard)) +
-    # geom_line(mapping = aes(y = y_low_bias), colour = "red") +
-    # geom_line(mapping = aes(y = y_high_bias), colour = "green") +
-    # geom_line(mapping = aes(y = y_small_size), colour = "blue") +
+    geom_line(mapping = aes(y = y_standard)) +
+    geom_line(mapping = aes(y = y_low_bias), colour = "red") +
+    geom_line(mapping = aes(y = y_high_bias), colour = "green") +
+    geom_line(mapping = aes(y = y_small_size), colour = "blue") +
     xlab("number of successes k") +
-    ylab("probability density")
+    ylab("probability")
 ```
 
 
@@ -192,12 +192,12 @@ normal_dists <- tibble(
     y_wide = dnorm(x, mean = 0, sd = 2),
 )
 
-# What do you expect the commented lines to look like in the plot?
+# What do you expect the geom_lines to look like in the plot?
 ggplot(data = normal_dists, mapping = aes(x = x)) +
-    # geom_line(mapping = aes(y = y_standard)) +
-    # geom_line(mapping = aes(y = y_shifted), color = "red") +
-    # geom_line(mapping = aes(y = y_tight), color = "green") +
-    # geom_line(mapping = aes(y = y_wide), color = "blue") +
+    geom_line(mapping = aes(y = y_standard)) +
+    geom_line(mapping = aes(y = y_shifted), color = "red") +
+    geom_line(mapping = aes(y = y_tight), color = "green") +
+    geom_line(mapping = aes(y = y_wide), color = "blue") +
     ylab("probability density")
 ```
 
@@ -243,8 +243,8 @@ for(i in 1:n_samples){
 }
 ```
 
-## Normal distribution: Plot sampled mean
-```{r, message=FALSE, echo=TRUE}
+## Plot sampled mean
+```{r, message=FALSE}
 sample_means %>%
   ggplot(aes(mean)) +
   geom_histogram(binwidth = 1) +
@@ -328,6 +328,7 @@ plot(LogLik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Log Likelihood")
 
 
 ## Priors: Exercise
+- What types of priors can you identify in the plot below?
 ```{r}
 sample_size <- 100
 x <- seq(0, 1, length = sample_size)
