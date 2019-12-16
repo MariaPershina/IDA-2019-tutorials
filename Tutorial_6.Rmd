@@ -1,7 +1,7 @@
 ---
 title: "Tutorial 6"
 author: "Maria, Marc"
-date: "12/13/2019"
+date: "12/16/2019- 12/20/2019-"
 output: ioslides_presentation
 ---
 
@@ -73,6 +73,61 @@ library(likelihood)
 - Bertrand Box Paradox?
 
 
+## Likelihood {.bigger}
+Likelihood   -  the likeliness of different parameters of a  distribution. In a sence it is a quantitative measure of model fit.
+
+```{r, echo=TRUE}
+#likelyhood that p==0.5 for a coin which fall head up 2 times out of 
+#4 tosses
+lik1<- dbinom(2, size=4, prob=0.5, log=FALSE)
+
+#likelyhood that p==0.5 for a coin which fall head up 4 times out of 
+#4 tosses
+lik2 <- dbinom(4, size=4, prob=0.5, log=FALSE)
+lik1
+lik2
+
+```
+
+## Likelihood plot
+```{r}
+p <- seq(0.01, 1, by=0.01) 
+Lik <- numeric(length=100)
+for(i in 1:100){
+  Lik[i] <- prod(dbinom(2,size=4,prob=p[i]))
+}
+plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="2 heads in 4 trials")
+```
+
+## Likelihood plot
+
+```{r}
+p <- seq(0.01, 1, by=0.01) 
+Lik <- numeric(length=100)
+for(i in 1:100){
+  Lik[i] <- prod(dbinom(4,size=4,prob=p[i]))
+}
+plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="4 heads in 4 trials")
+```
+
+
+## Log likelihood 
+Log transformations needed to make working with likelihoods easier!
+$\log\prod x_i=log\sum x_i$
+Thus, even if you have very small numbers LL does not converge to zero!
+```{r}
+# plot out the log-likelihood
+
+p <- seq(0.01, 1, by=0.01)
+LogLik <- numeric(length=100)
+for(i in 1:100){
+  LogLik[i] <- sum(dbinom(2, size=4, 
+  prob=p[i],log=TRUE))
+}
+plot(LogLik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Log Likelihood")
+```
+
+
 ## Models
 - A **statistical model** is a simple and elegant mathematical **representation of a random process**
     + captures the essence of the random process and leaves out all the irrelevant details
@@ -113,23 +168,17 @@ forgotten <- rbinom(30, 10,.10)
 plot(forgotten)
 ```
 
-## More on Binomial distribution
 
-```{r, echo=TRUE}
-### <b>
-dens<- dbinom(30, 300, .1) #probability density distribution   
-prob <- pbinom(30, 300, .1) #cumulative probability of an event.
-quantile<- qbinom(0.54, 300, .1) # takes the probability value and gives a number whose cumulative value matches the probability value
-### </b>
-round(dens, 3)
-round(prob,3)
-quantile
-```
+
 
 
 ## Binomial distribution: Parameters
-- Given the plot below, in which way do the the parameters $k$ (number of successes) and $N$ (number of trials) affect the binomial distribution?
+- Mean: $\mu = np$ and Standard Deviation: $\sigma=\sqrt{n(p)(1-p)}$
+
 ```{r}
+# Given the plot below, in which way do the the parameters k (number of successes) 
+#and N(number of trials) affect the binomial distribution?
+
 sample_size <- 100
 x <- 1:sample_size
 
@@ -148,11 +197,27 @@ ggplot(data = binomial_dists, mapping = aes(x = x)) +
     geom_line(mapping = aes(y = y_high_bias), colour = "green") +
     geom_line(mapping = aes(y = y_small_size), colour = "blue") +
     xlab("number of successes k") +
-    ylab("probability")
+    ylab("probability")+
+    ggtitle("Effect of parameters on a distribution")
+```
+
+
+## More on Binomial distribution
+
+```{r, echo=TRUE}
+
+dens<- dbinom(30, 300, .1) #probability density distribution   
+prob <- pbinom(30, 300, .1) #cumulative probability of an event.
+quantile<- qbinom(0.54, 300, .1) # takes the probability value and gives
+# a number whose cumulative value matches the probability value
+round(dens, 3)
+round(prob,3)
+quantile
 ```
 
 
 ## Normal distribution
+Likelihood function:
 
 $$P(x) = \frac{1}{\sigma*\sqrt{2\pi}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} $$
  
@@ -165,15 +230,19 @@ If $\mu=0$ and $\sigma=1$ It is called standart normal distribution
 ## Normal distribution: Example
 
 ```{r, echo=TRUE}
-norm <- rnorm(100)
-mu<- mean(norm)
-median_ <- median(norm)
-plot(norm, main=paste("Mean:",round(mu,2), "Median:", round(median_,2) )) 
+#Imagine we mesure IQ of 1000 people. Then we plot raw data.
+IQ <- rnorm(1000, 100, 15)
+```
+
+```{r}
+mu<- mean(IQ)
+median_ <- median(IQ)
+plot(IQ, main=paste("Mean:",round(mu,2), "Median:", round(median_,2) )) 
 ```
 
 ## Normal distribution: Density
 ```{r, echo=TRUE}
-dens <-density(norm)
+dens <-density(IQ)
 plot(dens, main = "Density of sampled data")
 ```
 
@@ -260,62 +329,14 @@ sample_means %>%
 - both distributions  should come from on family (e.g.normal)
 - $\delta$ indicates differencies between the means
 
-
-## Likelihood {.bigger}
-Likelihood   -  the likeliness of different parameters of a  distribution. In a sence it is a quantitative measure of model fit.
-
-```{r, echo=TRUE}
-#likelyhood that p==0.5 for a coin which fall head up 2 times out of 
-#4 tosses
-lik1<- dbinom(2, size=4, prob=0.5, log=FALSE)
-
-#likelyhood that p==0.5 for a coin which fall head up 4 times out of 
-#4 tosses
-lik2 <- dbinom(4, size=4, prob=0.5, log=FALSE)
-lik1
-lik2
-
-```
-
-## Likelihood plot
-```{r}
-p <- seq(0.01, 1, by=0.01) 
-Lik <- numeric(length=100)
-for(i in 1:100){
-  Lik[i] <- prod(dbinom(2,size=4,prob=p[i]))
-}
-plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="2 heads in 4 trials")
-```
-
-
-## Likelihood plot
-
-```{r}
-p <- seq(0.01, 1, by=0.01) 
-Lik <- numeric(length=100)
-for(i in 1:100){
-  Lik[i] <- prod(dbinom(4,size=4,prob=p[i]))
-}
-plot(Lik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Likelihood", main="4 heads in 4 trials")
+```{r, out.width="100%"}
+knitr::include_graphics("t-test-model-difference.png")
 ```
 
 
 
-## Log likelihood 
-Log transformations needed to make working with likelihoods easier!
-$\log\prod x_i=log\sum x_i$
-Thus, even if you have very small numbers LL does not converge to zero!
-```{r}
-# plot out the log-likelihood
 
-p <- seq(0.01, 1, by=0.01)
-LogLik <- numeric(length=100)
-for(i in 1:100){
-  LogLik[i] <- sum(dbinom(2, size=4, 
-  prob=p[i],log=TRUE))
-}
-plot(LogLik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Log Likelihood")
-```
+
 
 
 ## Which model to use? {.build}
@@ -326,6 +347,16 @@ plot(LogLik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Log Likelihood")
     
     - if you want to check whether a new drink increases sense of humor?
 
+
+## Priors
+- represent the modeller's **subjective** *a priori* beliefs about the random process at hand
+- may also just be used **pragmatically** to make calculations and statistical reasoning more elegant
+
+- priors **restrict the range of values** any given parameter can take
+    + **strongly informative** prior restrict the range a lot
+    + **weakly informative** priors restrict the range only a bit
+    + **uninformative** priors do not restrict the range, they assume all parameter values are equally likely
+    
 
 ## Priors: Exercise
 - What types of priors can you identify in the plot below?
@@ -349,15 +380,12 @@ ggplot(data = beta_dists, mapping = aes(x = x)) +
     ylab(expression(P(theta)))
 ```
 
+## Priors: example
+- For the calculation  how much beer should you buy for a party:
+    + our very close friends are coming and we know their habits: **strongly informative**
+    + our not that close friends are coming and we have a rough idea of their habits: **weakly informative**
+    + many strangers are coming, we dont really know their habits: **uninformative prior**s
 
-## Priors
-- represent the modeller's **subjective** *a priori* beliefs about the random process at hand
-- may also just be used **pragmatically** to make calculations and statistical reasoning more elegant
-
-- priors **restrict the range of values** any given parameter can take
-    + **strongly informative** prior restrict the range a lot
-    + **weakly informative** priors restrict the range only a bit
-    + **uninformative** priors do not restrict the range, they assume all parameter values are equally likely
     
     
 ## Frequentists vs. Bayesians
