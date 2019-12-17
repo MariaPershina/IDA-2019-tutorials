@@ -72,6 +72,16 @@ library(likelihood)
 - Medical Test?
 - Bertrand Box Paradox?
 
+## Models
+- A **statistical model** is a simple and elegant mathematical **representation of a random process**
+    + captures the essence of the random process and leaves out all the irrelevant details
+
+- A model $M$ consists of
+    + a dataset $D$ with **independent variables** $D_{IV}$ and **dependent variables** $D_{DV}$
+    + a **likelihood function** $P_M(D_{DV} \ | \ D_{IV}, \theta)$
+    + the model's **free parameters** $\theta$ allow you to fine-tune the model to your specific problem
+    + **Bayesian models** additionally have a **prior distribution** $P_M(\theta)$
+
 
 ## Likelihood {.bigger}
 Likelihood   -  the likeliness of different parameters of a  distribution. In a sence it is a quantitative measure of model fit.
@@ -128,15 +138,6 @@ plot(LogLik~p,lty="solid",type="l", xlab="Coin fairness", ylab="Log Likelihood")
 ```
 
 
-## Models
-- A **statistical model** is a simple and elegant mathematical **representation of a random process**
-    + captures the essence of the random process and leaves out all the irrelevant details
-
-- A model $M$ consists of
-    + a dataset $D$ with **independent variables** $D_{IV}$ and **dependent variables** $D_{DV}$
-    + a **likelihood function** $P_M(D_{DV} \ | \ D_{IV}, \theta)$
-    + the model's **free parameters** $\theta$ allow you to fine-tune the model to your specific problem
-    + **Bayesian models** additionally have a **prior distribution** $P_M(\theta)$
 
 ## Models vs Distributions
 - What is the difference between a model and a distribution?
@@ -270,58 +271,6 @@ ggplot(data = normal_dists, mapping = aes(x = x)) +
     ylab("probability density")
 ```
 
-## Normal distribution: Sampling
-```{r, echo=TRUE}
-### <b>
-mu <- 100 
-sigma <- 15
-n_samples <- 10000
-
-simulation <- tibble(
-    sample = 1:n_samples, 
-    x = rnorm(n = n_samples, mean = mu, sd = sigma)
-)
-### </b>
-```
-
-## Normal distribution: Plot 
-```{r, warning= FALSE, message=FALSE}
-simulation %>%
-  ggplot(aes(x = x)) +
-  geom_histogram(binwidth = 1) +
-  scale_x_continuous(limits = c(50, 150)) +
-  xlab("value") +
-  ylab("Frequency") +
-  ylim(0,300) +
-  theme_classic()
-```
-
-## Normal distribution: Sampling mean
-```{r, warning= FALSE, message=FALSE, echo=TRUE}
-
-sample_size <- 14 
-sample_means <- tibble(sample = 1:n_samples,
-                           mean = NA,
-                           std_dev = NA)
-
-for(i in 1:n_samples){
-  sample_values <- rnorm(n = sample_size,
-                         mean = mu,
-                         sd = sigma)
-  sample_means$mean[i] <- mean(sample_values)
-}
-```
-
-## Plot sampled mean
-```{r, message=FALSE}
-sample_means %>%
-  ggplot(aes(mean)) +
-  geom_histogram(binwidth = 1) +
- scale_x_continuous(limits = c(50, 150))+
-  xlab("Sampled mean") +
-  ylab("Frequency") +
-  theme_classic()
-```
 
 
 ## T-model
